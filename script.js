@@ -1,28 +1,26 @@
-// Selecting the different pages in the project
-const startPage = document.querySelector("#start-page");
-const selectPokemonPage = document.querySelector("#select-pokemon-page");
-const combatPage = document.querySelector("#combat-page");
-const resetTab = document.querySelector("#reset-tab");
+// Selecting pages using IDs
+const startPage = document.getElementById("start-page");
+const selectPokemonPage = document.getElementById("select-pokemon-page");
+const combatPage = document.getElementById("combat-page");
+const resetTab = document.getElementById("reset-tab");
 
-// Selecting elements from the pokemon selection page
-const pokemonSelectionContainer = document.querySelector(".pokemons-to-select");
-const loadingText = document.querySelector(".loading-container");
+// Selecting elements from the pokemon selection page using IDs
+const pokemonSelectionContainer = document.getElementById("pokemons-to-select");
+const loadingText = document.getElementById("loading-container");
 
-// Selecting elements from the combat page
-const myPokimonElement = document.querySelector(".my-pokemon").children[0];
-const myPokimonElementName =
-  document.getElementById("my-pokemon-stats").children[0];
-const myPokimonElementHpBar =
-  document.getElementById("my-pokemon-stats").children[1];
-const opponentPokimonElement =
-  document.querySelector(".opponent-pokemon").children[0];
-const opponentElementName = document.getElementById("opponent-pokemon-stats")
-  .children[0];
-const opponentElementHpBar = document.getElementById("opponent-pokemon-stats")
-  .children[1];
-const battleLogMessage = document.querySelector(".battle-log-message");
+// Selecting elements from the combat page using IDs
+const myPokemonImage = document.getElementById("my-pokemon-image");
+const myPokemonName = document.getElementById("my-pokemon-name");
+const myPokemonHpBar = document.getElementById("my-pokemon-hp-bar");
+
+const opponentPokemonImage = document.getElementById("opponent-pokemon-image");
+const opponentPokemonName = document.getElementById("opponent-pokemon-name");
+const opponentPokemonHpBar = document.getElementById("opponent-pokemon-hp-bar");
+
+const battleLogMessage = document.getElementById("battle-log-message");
 const attackButton = document.getElementById("attack-button");
 
+// Global variables to store selected Pokémon data
 let selectedPokemon; // Your Pokemon (full API data)
 let selectedOpponentPokemon; // Opponent Pokemon (full API data)
 
@@ -54,6 +52,7 @@ async function fetchPokemons() {
         continue;
       }
       let data = await response.json();
+      // Insert a pokemon card. The onclick calls selectPokemon(this)
       pokemonSelectionContainer.insertAdjacentHTML(
         "beforeend",
         `<div onclick="selectPokemon(this)" id="${randomNumber}" class="pokemon-card" style="background-image: url('${
@@ -80,6 +79,8 @@ async function fetchPokemons() {
 /**
  * Called when a Pokemon card is clicked.
  * Fetches and stores your selected Pokemon data, then loads the battle UI.
+ *
+ * @param {HTMLElement} elem - The clicked Pokemon card element.
  */
 function selectPokemon(elem) {
   const id = elem.id;
@@ -124,7 +125,6 @@ function selectPokemon(elem) {
  * Fetches a random opponent Pokemon, updates the UI, then starts the battle.
  */
 function loadBattleUI() {
-  // Fetch a random opponent Pokemon.
   let randomNumber = Math.floor(Math.random() * 500) + 1;
   fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber}`)
     .then((response) => {
@@ -137,11 +137,7 @@ function loadBattleUI() {
     })
     .then((data) => {
       selectedOpponentPokemon = data;
-
-      // Display an initial battle log message.
       battleLogMessage.textContent = `You are now facing ${data.name.toUpperCase()}`;
-
-      // Render the data for both your Pokemon and your opponent.
       displayPokemonsData("mine", selectedPokemon);
       displayPokemonsData("opp", selectedOpponentPokemon);
 
@@ -154,9 +150,9 @@ function loadBattleUI() {
 }
 
 /**
- * Compares the attack speeds of both Pokemon
- * Displays a message indicating who attacks first
- * If you attack first, the attack button appears; if your opponent is faster, his attack is triggered automatically
+ * Compares the attack speeds of both Pokemon.
+ * Displays a message indicating who attacks first.
+ * If you attack first, the attack button appears; if your opponent is faster, his attack is triggered automatically.
  */
 function battleStart() {
   const mySpeed = selectedPokemon.stats.find(
@@ -166,7 +162,6 @@ function battleStart() {
     (stat) => stat.stat.name === "speed"
   ).base_stat;
 
-  // Deciding who will attack first
   if (mySpeed >= opponentSpeed) {
     battleLogMessage.textContent = "You get to attack first!";
     attackButton.classList.remove("invisible");
@@ -177,21 +172,21 @@ function battleStart() {
 }
 
 /**
- * Updates the display of HP bar for the opponent Pokemon
+ * Updates the display of the opponent's HP bar.
  */
 function updateOpponentHpBar() {
   let percentage = (opponentCurrentHP / opponentTotalHP) * 100;
-  opponentElementHpBar.style.width = percentage + "%";
-  opponentElementHpBar.textContent = `HP: ${opponentCurrentHP}`;
+  opponentPokemonHpBar.style.width = percentage + "%";
+  opponentPokemonHpBar.textContent = `HP: ${opponentCurrentHP}`;
 }
 
 /**
- * Updates the display of HP bar for your Pokemon.
+ * Updates the display of your Pokemon's HP bar.
  */
 function updatePlayerHpBar() {
   let percentage = (playerCurrentHP / playerTotalHP) * 100;
-  myPokimonElementHpBar.style.width = percentage + "%";
-  myPokimonElementHpBar.textContent = `HP: ${playerCurrentHP}`;
+  myPokemonHpBar.style.width = percentage + "%";
+  myPokemonHpBar.textContent = `HP: ${playerCurrentHP}`;
 }
 
 /**
@@ -200,57 +195,49 @@ function updatePlayerHpBar() {
  */
 function playerAttack() {
   attackButton.classList.add("invisible");
-
-  // Subtract 20 HP from the opponent.
   opponentCurrentHP -= 20;
   if (opponentCurrentHP < 0) opponentCurrentHP = 0;
   updateOpponentHpBar();
 
-  // Check if the opponent is defeated.
   if (opponentCurrentHP === 0) {
     battleLogMessage.textContent = "You defeated your opponent!";
-    opponentPokimonElement.style.backgroundImage = `url()`;
+    opponentPokemonImage.style.backgroundImage = ""; // clear image on defeat
     return;
   }
-
   battleLogMessage.textContent = "Your opponent's turn!";
-
-  // After 1.5 seconds, trigger the opponent's attack.
   setTimeout(opponentAttack, 1500);
 }
 
 /**
- * Handles the opponent's attack
- * The opponent's attack reduces your Pokemon's HP
+ * Handles the opponent's attack.
+ * The opponent's attack reduces your Pokemon's HP.
  */
 function opponentAttack() {
   playerCurrentHP -= 20;
   if (playerCurrentHP < 0) playerCurrentHP = 0;
   updatePlayerHpBar();
 
-  // Check if your Pokemon is defeated.
   if (playerCurrentHP === 0) {
     battleLogMessage.textContent = "Your opponent defeated you!";
-    myPokimonElement.style.backgroundImage = "url()";
+    myPokemonImage.style.backgroundImage = "";
     return;
   }
-
   battleLogMessage.textContent = "Your turn!";
-
-  // If not defeated, it's your turn again – show the attack button.
   attackButton.classList.remove("invisible");
 }
 
 /**
- * Renders the given Pokemon's data in the battle UI
+ * Renders the given Pokemon's data in the battle UI.
+ * - If side is "opp", the opponent's Pokemon data is displayed.
+ * - If side is "mine", your Pokemon's data is displayed.
  *
  * @param {string} side - Either "mine" or "opp".
  * @param {object} pokemon - The Pokemon data fetched from the API.
  */
 function displayPokemonsData(side, pokemon) {
   if (side === "opp") {
-    opponentPokimonElement.style.backgroundImage = `url(${pokemon.sprites.front_default})`;
-    opponentElementName.textContent =
+    opponentPokemonImage.style.backgroundImage = `url(${pokemon.sprites.front_default})`;
+    opponentPokemonName.textContent =
       pokemon.name.charAt(0).toUpperCase() +
       pokemon.name.slice(1).toLowerCase();
     const oppHpStat = pokemon.stats.find(
@@ -258,19 +245,20 @@ function displayPokemonsData(side, pokemon) {
     );
     opponentTotalHP = oppHpStat.base_stat;
     opponentCurrentHP = opponentTotalHP;
-    opponentElementHpBar.style.width = "100%";
-    opponentElementHpBar.textContent = `HP: ${opponentCurrentHP}`;
+    opponentPokemonHpBar.style.width = "100%";
+    opponentPokemonHpBar.textContent = `HP: ${opponentCurrentHP}`;
   } else if (side === "mine") {
-    myPokimonElement.style.backgroundImage = `url(${pokemon.sprites.front_default})`;
-    myPokimonElementName.textContent =
+    myPokemonImage.style.backgroundImage = `url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${pokemon.id}.png")`;
+    myPokemonName.textContent =
       pokemon.name.charAt(0).toUpperCase() +
       pokemon.name.slice(1).toLowerCase();
     const hpStat = pokemon.stats.find((stat) => stat.stat.name === "hp");
     playerTotalHP = hpStat.base_stat;
     playerCurrentHP = playerTotalHP;
-    myPokimonElementHpBar.style.width = "100%";
-    myPokimonElementHpBar.textContent = `HP: ${playerCurrentHP}`;
+    myPokemonHpBar.style.width = "100%";
+    myPokemonHpBar.textContent = `HP: ${playerCurrentHP}`;
   }
 }
 
+// Attach event listener to the attack button.
 attackButton.addEventListener("click", playerAttack);

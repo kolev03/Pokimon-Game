@@ -19,9 +19,9 @@
     <div id="select-pokemon-page">
       <h1>Choose your pokemon:</h1>
       <div class="pokemons-selection-container">
-        <div class="pokemons-to-select invisible"></div>
-        <div class="loading-container">
-          <h2>
+        <div id="pokemons-to-select" class="pokemons-to-select invisible"></div>
+        <div id="loading-container" class="loading-container">
+          <h2 class="loading-text">
             Loading data <span class="first-dot">. </span
             ><span class="second-dot">. </span><span class="third-dot">.</span>
           </h2>
@@ -30,33 +30,46 @@
     </div>
     <!-- ------------------------------------------- -->
     <div id="combat-page" class="invisible">
-      <div class="battle-field">
-        <div class="my-pokemon">
-          <div class="battle-field-pokemon-image">
-            <div id="my-pokemon-stats" class="battle-field-pokemon-stats">
-              <h2 class="battle-field-pokemon-name"></h2>
-              <div class="battle-field-pokemon-hp-bar"></div>
-            </div>
+      <div id="battle-field">
+        <div id="my-pokemon" class="my-pokemon">
+          <div id="my-pokemon-image" class="battle-field-pokemon-image"></div>
+          <div id="my-pokemon-stats" class="battle-field-pokemon-stats">
+            <h2 id="my-pokemon-name" class="battle-field-pokemon-name"></h2>
+            <div
+              id="my-pokemon-hp-bar"
+              class="battle-field-pokemon-hp-bar"
+            ></div>
           </div>
         </div>
-        <div class="opponent-pokemon">
-          <div class="battle-field-pokemon-image">
-            <div id="opponent-pokemon-stats" class="battle-field-pokemon-stats">
-              <h2 class="battle-field-pokemon-name"></h2>
-              <div class="battle-field-pokemon-hp-bar"></div>
-            </div>
+        <div id="opponent-pokemon" class="opponent-pokemon">
+          <div
+            id="opponent-pokemon-image"
+            class="battle-field-pokemon-image"
+          ></div>
+          <div id="opponent-pokemon-stats" class="battle-field-pokemon-stats">
+            <h2
+              id="opponent-pokemon-name"
+              class="battle-field-pokemon-name"
+            ></h2>
+            <div
+              id="opponent-pokemon-hp-bar"
+              class="battle-field-pokemon-hp-bar"
+            ></div>
           </div>
         </div>
       </div>
-      <div class="battle-log">
+      <div id="battle-log" class="battle-log">
         <div class="battle-log-section">
-          <h2 class="battle-log-message">You are facing</h2>
+          <h2 id="battle-log-message" class="battle-log-message">
+            You are facing
+          </h2>
           <button id="attack-button" class="invisible">Attack</button>
         </div>
       </div>
+      <div id="reset-tab" class="reset-tab">...</div>
     </div>
     <!-- ------------------------------------------- -->
-    <div id="reset-tab invisible"></div>
+    <div id="reset-tab" class="invisible"></div>
     <!-- ------------------------------------------- -->
   </body>
   <script src="script.js"></script>

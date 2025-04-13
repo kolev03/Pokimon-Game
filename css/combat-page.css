@@ -1,11 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
 
-.combat-page {
+/* Combat Page */
+#combat-page {
   width: 100%;
   height: 100vh;
 }
 
-.battle-field {
+/* Battle Field Area */
+#battle-field {
   height: 73vh;
   width: 100%;
   display: flex;
@@ -15,49 +17,72 @@
   background-size: cover;
 }
 
-.my-pokemon,
-.oppenent-pokemon {
+/* Layout for both sides */
+#my-pokemon,
+#opponent-pokemon {
   height: 100%;
   width: 50%;
   display: flex;
+  flex-direction: column;
 }
 
-.battle-field-pokemon-image {
+#my-pokemon {
+  flex-direction: column-reverse;
+  padding-left: 100px;
+  align-items: center;
+}
+
+/* Pokémon Image for both sides */
+#my-pokemon-image,
+#opponent-pokemon-image {
   width: 350px;
   height: 350px;
-}
-
-.my-pokemon .battle-field-pokemon-image {
-  margin: auto 0 -30px 250px;
-  background-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/23.png");
+  position: relative;
+  z-index: 1;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 }
 
-.opponent-pokemon .battle-field-pokemon-image {
+/* My Pokémon image styling */
+#my-pokemon-image {
+  background-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/23.png");
+}
+
+/* Opponent Pokémon image styling */
+#opponent-pokemon-image {
   margin: 20px 0 0 60px;
   background-image: url("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/21.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
 }
 
-.battle-field-pokemon-stats {
+/* Pokémon Stats Panel (applied to both) */
+#my-pokemon-stats,
+#opponent-pokemon-stats {
   width: 300px;
   height: min-content;
   padding: 5px;
   background-color: white;
-  margin-left: 20px;
 }
 
-.battle-field-pokemon-name {
+#my-pokemon-stats {
+  margin-bottom: -30px;
+}
+#opponent-pokemon-stats {
+  margin-top: -70px;
+  margin-left: 90px;
+}
+
+/* Pokémon Name styling */
+#my-pokemon-name,
+#opponent-pokemon-name {
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
   font-size: 1.25rem;
 }
 
-.battle-field-pokemon-hp-bar {
+/* HP bar styling */
+#my-pokemon-hp-bar,
+#opponent-pokemon-hp-bar {
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
   height: 30px;
@@ -66,7 +91,8 @@
   align-items: center;
 }
 
-.battle-log {
+/* Battle Log Area */
+#battle-log {
   height: 27vh;
   width: 100%;
   background-color: rgb(53, 53, 53);
@@ -75,7 +101,8 @@
   justify-content: center;
 }
 
-.battle-log-section{
+/* Battle Log Section (can remain as a class if not changed) */
+.battle-log-section {
   width: 80%;
   border: 2px solid white;
   color: white;
@@ -87,11 +114,13 @@
   padding: 15px;
 }
 
-.battle-log-message {
+/* Battle Log Message */
+#battle-log-message {
   font-size: 3rem;
 }
 
-.battle-log #attack-button{
+/* Attack Button */
+#attack-button {
   color: white;
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
@@ -100,23 +129,90 @@
   padding: 10px;
 }
 
+/* Responsive Styles */
+
 @media only screen and (max-width: 1100px) {
-  .my-pokemon .battle-field-pokemon-image {
+  #my-pokemon-image {
     margin: auto 0 10px 150px;
   }
 }
 
 @media only screen and (max-width: 875px) {
-  .my-pokemon .battle-field-pokemon-image {
+  #my-pokemon-image {
     margin: auto 0 50px 50px;
   }
 
-  .opponent-pokemon .battle-field-pokemon-image {
+  #opponent-pokemon-image {
     margin: 100px 0 0 50px;
   }
 
-  .battle-field-pokemon-image {
+  #my-pokemon-image,
+  #opponent-pokemon-image {
     width: 250px;
     height: 250px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #battle-field {
+    flex-direction: column-reverse;
+    height: 75vh;
+    gap: 30px;
+  }
+
+  #my-pokemon {
+    width: 100%;
+    flex-direction: column-reverse;
+    justify-content: left;
+    padding: 0;
+    margin-bottom: -60px;
+  }
+
+  #my-pokemon-stats{
+    margin-bottom: -50px;
+  }
+
+  #opponent-pokemon{
+    width: 100%;
+    justify-content:center;
+    margin: 0;
+    flex-direction: column-reverse;
+  }
+
+  #opponent-pokemon-stats{
+    margin: 30px auto 0;
+  }
+
+  #my-pokemon-image {
+    margin: 30px auto 0;
+  }
+
+
+  #my-pokemon-image,
+  #opponent-pokemon-image {
+    width: 250px;
+    height: 250px;
+  }
+
+  #opponent-pokemon-image{
+    margin: 0 auto;
+  }
+
+  #battle-log {
+    height: 25vh;
+  }
+
+  .battle-log-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #battle-log-message {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  #attack-button {
+    font-size: 2rem;
   }
 }
