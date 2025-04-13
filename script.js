@@ -5,6 +5,7 @@ const combatPage = document.getElementById("combat-page");
 const resetTab = document.getElementById("reset-tab");
 
 // Selecting elements from the pokemon selection page using IDs
+const selectPokemonText = document.getElementById("select-pokemon-text");
 const pokemonSelectionContainer = document.getElementById("pokemons-to-select");
 const loadingText = document.getElementById("loading-container");
 
@@ -73,6 +74,7 @@ async function fetchPokemons() {
       alert(error);
     }
   }
+  selectPokemonText.style.visibility = "visible";
   loadingText.classList.add("invisible");
   pokemonSelectionContainer.classList.remove("invisible");
 }
@@ -196,16 +198,22 @@ function updatePlayerHpBar() {
  */
 function playerAttack() {
   attackButton.classList.add("invisible");
-  opponentCurrentHP -= 20;
-  if (opponentCurrentHP < 0) opponentCurrentHP = 0;
-  updateOpponentHpBar();
+  let randomNumber = Math.floor(Math.random() * 10) + 1;
+  console.log(randomNumber);
+  if (randomNumber === 1) {
+    battleLogMessage.textContent = "You missed your attack!";
+  } else {
+    opponentCurrentHP -= 15;
+    if (opponentCurrentHP < 0) opponentCurrentHP = 0;
+    updateOpponentHpBar();
 
-  if (opponentCurrentHP === 0) {
-    battleLogMessage.textContent = "You WON!";
-    resetGame();
-    return;
+    if (opponentCurrentHP === 0) {
+      battleLogMessage.textContent = "You WON!";
+      resetGame();
+      return;
+    }
+    battleLogMessage.textContent = "Your opponent's turn!";
   }
-  battleLogMessage.textContent = "Your opponent's turn!";
   setTimeout(opponentAttack, 1500);
 }
 
@@ -214,16 +222,21 @@ function playerAttack() {
  * The opponent's attack reduces your Pokemon's HP.
  */
 function opponentAttack() {
-  playerCurrentHP -= 200;
-  if (playerCurrentHP < 0) playerCurrentHP = 0;
-  updatePlayerHpBar();
+  let randomNumber = Math.floor(Math.random() * 10) + 1;
+  if (randomNumber === 1) {
+    battleLogMessage.textContent = "Opponent missed their attack!";
+  } else {
+    playerCurrentHP -= 15;
+    if (playerCurrentHP < 0) playerCurrentHP = 0;
+    updatePlayerHpBar();
 
-  if (playerCurrentHP === 0) {
-    battleLogMessage.textContent = "You LOST!";
-    resetGame();
-    return;
+    if (playerCurrentHP === 0) {
+      battleLogMessage.textContent = "You LOST!";
+      resetGame();
+      return;
+    }
+    battleLogMessage.textContent = "Your turn!";
   }
-  battleLogMessage.textContent = "Your turn!";
   attackButton.classList.remove("invisible");
 }
 
@@ -273,6 +286,10 @@ resetButton.addEventListener("click", function () {
   combatPage.classList.add("invisible");
   numbersArray = [];
   pokemonSelectionContainer.innerHTML = "";
+  selectPokemonText.style.visibility = "hidden";
+  loadingText.classList.remove("invisible");
+  pokemonSelectionContainer.classList.add("invisible");
   fetchPokemons();
   selectPokemonPage.classList.remove("invisible");
+  resetButton.classList.add("invinsible");
 });
