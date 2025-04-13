@@ -120,7 +120,8 @@
 }
 
 /* Attack Button */
-#attack-button {
+#attack-button,
+#reset-button {
   color: white;
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
@@ -157,7 +158,6 @@
   #battle-field {
     flex-direction: column-reverse;
     height: 75vh;
-    gap: 30px;
   }
 
   #my-pokemon {
@@ -168,34 +168,33 @@
     margin-bottom: -60px;
   }
 
-  #my-pokemon-stats{
+  #my-pokemon-stats {
     margin-bottom: -50px;
   }
 
-  #opponent-pokemon{
+  #opponent-pokemon {
     width: 100%;
-    justify-content:center;
+    justify-content: center;
     margin: 0;
     flex-direction: column-reverse;
   }
 
-  #opponent-pokemon-stats{
+  #opponent-pokemon-stats {
     margin: 30px auto 0;
+  }
+
+  #my-pokemon-image,
+  #opponent-pokemon-image {
+    width: 225px;
+    height: 225px;
+  }
+
+  #opponent-pokemon-image {
+    margin: 0 auto;
   }
 
   #my-pokemon-image {
     margin: 30px auto 0;
-  }
-
-
-  #my-pokemon-image,
-  #opponent-pokemon-image {
-    width: 250px;
-    height: 250px;
-  }
-
-  #opponent-pokemon-image{
-    margin: 0 auto;
   }
 
   #battle-log {
@@ -212,7 +211,8 @@
     text-align: center;
   }
 
-  #attack-button {
+  #attack-button,
+  #reset-button {
     font-size: 2rem;
   }
 }

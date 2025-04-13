@@ -19,6 +19,7 @@ const opponentPokemonHpBar = document.getElementById("opponent-pokemon-hp-bar");
 
 const battleLogMessage = document.getElementById("battle-log-message");
 const attackButton = document.getElementById("attack-button");
+const resetButton = document.getElementById("reset-button");
 
 // Global variables to store selected Pokémon data
 let selectedPokemon; // Your Pokemon (full API data)
@@ -26,6 +27,7 @@ let selectedOpponentPokemon; // Opponent Pokemon (full API data)
 
 let playerTotalHP, playerCurrentHP;
 let opponentTotalHP, opponentCurrentHP;
+let numbersArray = [];
 
 // Start by fetching Pokemon for the selection screen.
 fetchPokemons();
@@ -34,9 +36,8 @@ fetchPokemons();
  * Fetch 10 unique Pokemon from the API into the selection container.
  */
 async function fetchPokemons() {
-  const numbersArray = [];
   let randomNumber;
-  for (let index = 1; index < 11; index++) {
+  for (let index = 1; index < 51; index++) {
     // Generate a unique random number between 1 and 500.
     do {
       randomNumber = Math.floor(Math.random() * 500) + 1;
@@ -200,8 +201,8 @@ function playerAttack() {
   updateOpponentHpBar();
 
   if (opponentCurrentHP === 0) {
-    battleLogMessage.textContent = "You defeated your opponent!";
-    opponentPokemonImage.style.backgroundImage = ""; // clear image on defeat
+    battleLogMessage.textContent = "You WON!";
+    resetGame();
     return;
   }
   battleLogMessage.textContent = "Your opponent's turn!";
@@ -213,13 +214,13 @@ function playerAttack() {
  * The opponent's attack reduces your Pokemon's HP.
  */
 function opponentAttack() {
-  playerCurrentHP -= 20;
+  playerCurrentHP -= 200;
   if (playerCurrentHP < 0) playerCurrentHP = 0;
   updatePlayerHpBar();
 
   if (playerCurrentHP === 0) {
-    battleLogMessage.textContent = "Your opponent defeated you!";
-    myPokemonImage.style.backgroundImage = "";
+    battleLogMessage.textContent = "You LOST!";
+    resetGame();
     return;
   }
   battleLogMessage.textContent = "Your turn!";
@@ -260,5 +261,18 @@ function displayPokemonsData(side, pokemon) {
   }
 }
 
+function resetGame() {
+  attackButton.classList.add("invisible");
+  resetButton.classList.remove("invisible");
+}
+
 // Attach event listener to the attack button.
 attackButton.addEventListener("click", playerAttack);
+
+resetButton.addEventListener("click", function () {
+  combatPage.classList.add("invisible");
+  numbersArray = [];
+  pokemonSelectionContainer.innerHTML = "";
+  fetchPokemons();
+  selectPokemonPage.classList.remove("invisible");
+});
