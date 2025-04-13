@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/start-page.css" />
     <link rel="stylesheet" href="css/select-pokemon-page.css" />
+    <link rel="stylesheet" href="css/combat-page.css" />
     <title>Pokimon Game</title>
   </head>
   <body>
@@ -15,7 +16,7 @@
       <div class="intrusctions"></div>
     </div> -->
     <!-- ------------------------------------------- -->
-    <!-- <div id="select-pokemon-page">
+    <div id="select-pokemon-page">
       <h1>Choose your pokemon:</h1>
       <div class="pokemons-selection-container">
         <div class="pokemons-to-select invisible"></div>
@@ -26,9 +27,34 @@
           </h2>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- ------------------------------------------- -->
-    <div id="combat-page invisble"></div>
+    <div id="combat-page" class="invisible">
+      <div class="battle-field">
+        <div class="my-pokemon">
+          <div class="battle-field-pokemon-image">
+            <div id="my-pokemon-stats" class="battle-field-pokemon-stats">
+              <h2 class="battle-field-pokemon-name"></h2>
+              <div class="battle-field-pokemon-hp-bar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="opponent-pokemon">
+          <div class="battle-field-pokemon-image">
+            <div id="opponent-pokemon-stats" class="battle-field-pokemon-stats">
+              <h2 class="battle-field-pokemon-name"></h2>
+              <div class="battle-field-pokemon-hp-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="battle-log">
+        <div class="battle-log-section">
+          <h2 class="battle-log-message">You are facing</h2>
+          <button id="attack-button" class="invisible">Attack</button>
+        </div>
+      </div>
+    </div>
     <!-- ------------------------------------------- -->
     <div id="reset-tab invisible"></div>
     <!-- ------------------------------------------- -->

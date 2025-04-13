@@ -8,6 +8,10 @@
   user-select: none;
 }
 
+body {
+  background-color: black;
+}
+
 #start-page {
   width: 100%;
   height: 100vh;
