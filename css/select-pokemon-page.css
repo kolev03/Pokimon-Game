@@ -69,6 +69,7 @@
   font-optical-sizing: auto;
   transition: 0.3s ease;
   font-size: 1.25rem;
+  white-space: normal;
 }
 
 .invisible {
@@ -111,4 +112,3 @@
     opacity: 0;
   }
 }
-

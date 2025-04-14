@@ -61,7 +61,13 @@
   width: 300px;
   height: min-content;
   padding: 5px;
-  background-color: white;
+  background: linear-gradient(
+    153deg,
+    rgba(141, 212, 240, 1) 1%,
+    rgba(255, 255, 255, 1) 66%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  border-radius: 10px 5px;
 }
 
 #my-pokemon-stats {
@@ -89,6 +95,7 @@
   background-color: green;
   display: flex;
   align-items: center;
+  border-radius: 10px 5px;
 }
 
 /* Battle Log Area */
@@ -214,5 +221,11 @@
   #attack-button,
   #reset-button {
     font-size: 2rem;
+  }
+}
+
+@media only screen and (max-height: 600px) {
+  .battle-log-section {
+    border: none;
   }
 }

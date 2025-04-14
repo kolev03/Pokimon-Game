@@ -101,7 +101,7 @@ function selectPokemon(elem) {
   selectPokemonPage.classList.add("invisible");
   setTimeout(() => {
     combatPage.classList.remove("invisible");
-  }, 2000);
+  }, 1000);
 
   // Fetch your selected Pokemon's data and then load the battle UI.
   fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
@@ -291,5 +291,9 @@ resetButton.addEventListener("click", function () {
   pokemonSelectionContainer.classList.add("invisible");
   fetchPokemons();
   selectPokemonPage.classList.remove("invisible");
-  resetButton.classList.add("invinsible");
+  resetButton.classList.add("invisible");
+});
+
+pokemonCardElement.addEventListener("touchstart", function (e) {
+  selectPokemon(this);
 });
