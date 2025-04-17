@@ -31,11 +31,14 @@ let playerTotalHP, playerCurrentHP;
 let opponentTotalHP, opponentCurrentHP;
 let numbersArray = [];
 
+let backgroundMusic;
+
 /**
  * Fetch 151 unique Pokemons from the API into the selection container.
  */
 async function fetchPokemons() {
   let randomNumber;
+
   for (let index = 1; index < 151; index++) {
     // Generate a unique random number between 1 and 500.
     do {
@@ -74,6 +77,7 @@ async function fetchPokemons() {
     }
   }
 
+  selectPokemonPage.style.position = "relative";
   selectPokemonText.style.visibility = "visible";
   loadingText.classList.add("invisible");
   pokemonSelectionContainer.classList.remove("invisible");
@@ -88,6 +92,7 @@ async function fetchPokemons() {
 function selectPokemon(elem) {
   const id = elem.id;
 
+  backgroundMusic.pause();
   // Play the Pokemon cry.
   const sound = new Audio(
     `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`
@@ -96,8 +101,9 @@ function selectPokemon(elem) {
   sound.playbackRate = 0.75;
   sound.play();
 
-  // Hide selection page and, after a 2s delay, show the combat page.
   selectPokemonPage.classList.add("invisible");
+  startPage.style.display = "none";
+
   setTimeout(() => {
     combatPage.classList.remove("invisible");
   }, 1000);
@@ -115,6 +121,7 @@ function selectPokemon(elem) {
     .then((data) => {
       selectedPokemon = data;
       // Once data is fetched, load the battle UI (which will also fetch the opponent).
+      battleUIAnimation();
       loadBattleUI();
     })
     .catch((error) => {
@@ -144,7 +151,13 @@ function loadBattleUI() {
       displayPokemonsData("opp", selectedOpponentPokemon);
 
       // After 2 seconds, start the battle by comparing attack speeds.
-      setTimeout(battleStart, 2000);
+      setTimeout(battleStart, 5000);
+      setTimeout(() => {
+        backgroundMusic = new Audio("./mp3/battle.mp3");
+        backgroundMusic.volume = 0.7;
+        backgroundMusic.loop = true;
+        backgroundMusic.play();
+      }, 1500);
     })
     .catch((error) => {
       alert(error);
@@ -169,7 +182,7 @@ function battleStart() {
     displayAttacks(true);
   } else {
     battleLogMessage.textContent = "Your opponent will attack first!";
-    setTimeout(opponentRandomAttack, 1500);
+    setTimeout(opponentRandomAttack, 3500);
   }
 }
 
@@ -225,6 +238,7 @@ function displayPokemonsData(side, pokemon) {
 }
 
 function resetGame() {
+  backgroundMusic.pause();
   attackButton.classList.add("invisible");
   resetButton.classList.remove("invisible");
 }
@@ -267,49 +281,53 @@ const moves = {
  * - moveKey -> choosing which number of move will be applied
  */
 function performMove(who, moveKey) {
-  // console.log(selectedPokemon.stats[1].base_stat);
   const move = moves[moveKey];
   const isPlayer = who === "mine";
-
   const attackerName = isPlayer ? "You" : "Opponent";
 
+  // miss check
   if (Math.random() > move.hitChance) {
     battleLogMessage.textContent = `${attackerName} missed the ${move.name}!`;
-  } else {
+    return isPlayer
+      ? setTimeout(opponentRandomAttack, 1500)
+      : setTimeout(() => displayAttacks(true), 1500);
+  }
+
+  // start the visual attack
+  attackAnimation(isPlayer);
+  displayAttacks(false);
+
+  setTimeout(() => {
+    // apply damage
     if (isPlayer) {
-      opponentCurrentHP -= move.damage;
-      if (opponentCurrentHP < 0) opponentCurrentHP = 0;
+      opponentCurrentHP = Math.max(0, opponentCurrentHP - move.damage);
       updateOpponentHpBar();
     } else {
-      playerCurrentHP -= move.damage;
-      if (playerCurrentHP < 0) playerCurrentHP = 0;
+      playerCurrentHP = Math.max(0, playerCurrentHP - move.damage);
       updatePlayerHpBar();
     }
 
-    // Checking if the game is over
+    // check for ko
     if (opponentCurrentHP === 0) {
-      displayAttacks(false);
       battleLogMessage.textContent = "You WON!";
       return resetGame();
     }
     if (playerCurrentHP === 0) {
-      displayAttacks(false);
       battleLogMessage.textContent = "You LOST!";
       return resetGame();
     }
-
-    // Next turn message
+    // announce next turn
     battleLogMessage.textContent = isPlayer
       ? "Your opponent's turn!"
       : "Your turn!";
-  }
 
-  if (isPlayer) {
-    displayAttacks(false);
-    setTimeout(opponentRandomAttack, 1500);
-  } else {
-    setTimeout(() => displayAttacks(true), 1500);
-  }
+    // schedule the opponent or re‑enable buttons
+    if (isPlayer) {
+      setTimeout(opponentRandomAttack, 1500);
+    } else {
+      displayAttacks(true);
+    }
+  }, 1400);
 }
 
 function opponentRandomAttack() {
@@ -326,24 +344,13 @@ function opponentRandomAttack() {
   }, 1500);
 }
 
+// Starting the game button
 document.getElementById("start-game").addEventListener("click", function () {
-  gsap.set(selectPokemonPage, {
-    display: "block",
-    xPercent: 100,
-  });
-
-  gsap
-    .timeline({
-      defaults: { duration: 0.7, ease: "power3.inOut" },
-      onComplete: () => {
-        gsap.set(startPage, {
-          visibility: "hidden",
-          xPercent: 0,
-        });
-      },
-    })
-    .to(startPage, { xPercent: -100 })
-    .to(selectPokemonPage, { xPercent: 0 }, "<");
+  startPageToSelectPageAnimation();
+  backgroundMusic = new Audio("./mp3/selectPage.mp3");
+  backgroundMusic.loop = true;
+  backgroundMusic.volume = 0.2;
+  backgroundMusic.play();
 
   fetchPokemons();
 });
@@ -363,3 +370,96 @@ resetButton.addEventListener("click", function () {
   selectPokemonPage.classList.remove("invisible");
   resetButton.classList.add("invisible");
 });
+
+// GSAP ANIMATIONS----------------------------------------------
+
+function startPageToSelectPageAnimation() {
+  gsap.set(selectPokemonPage, {
+    display: "block",
+    xPercent: 100,
+  });
+
+  gsap
+    .timeline({
+      defaults: { duration: 0.7, ease: "power3.inOut" },
+      onComplete: () => {
+        gsap.set(startPage, {
+          block: "none",
+          xPercent: 0,
+        });
+      },
+    })
+    .to(startPage, { xPercent: -100 })
+    .to(selectPokemonPage, { xPercent: 0 }, "<");
+}
+function battleUIAnimation() {
+  const blackOv = document.getElementById("blackOverlay");
+  gsap.set(blackOv, { display: "block", xPercent: 100 });
+  gsap.set(combatPage, { display: "block", xPercent: 100 });
+
+  // 2) timeline:
+  //    a) black slides in (0.5s)
+  //    b) panels slide (0.7s)
+  //    c) black slides out (0.5s)
+  gsap
+    .timeline({
+      defaults: { duration: 1.75, ease: "expo.out" },
+      onComplete: () => {
+        gsap.set(selectPokemonPage, { display: "none", xPercent: 0 });
+      },
+    })
+    .to(blackOv, { xPercent: 100 }) // flash black
+    .to(
+      selectPokemonPage,
+      { xPercent: -100, duration: 1.7, ease: "expo.out" },
+      "+=0"
+    )
+    .to(combatPage, { xPercent: 0, duration: 0.7, ease: "expo.out" }, "<")
+    .to(blackOv, { xPercent: 100, duration: 0.5, ease: "power1.inOut" });
+}
+
+/**
+ * If true, my pokemon
+ * If false, opp
+ */
+function attackAnimation(who) {
+  const attackerEl = who ? myPokemonImage : opponentPokemonImage;
+  const defenderEl = who ? opponentPokemonImage : myPokemonImage;
+
+  attackerEl.style.zIndex = 3;
+  defenderEl.style.zIndex = 2;
+
+  const a = attackerEl.getBoundingClientRect();
+  const b = defenderEl.getBoundingClientRect();
+
+  const dx = b.left + b.width * 0.5 - (a.left + a.width * 0.5);
+  const dy = b.top + b.height * 0.5 - (a.top + a.height * 0.5);
+
+  gsap
+    .timeline()
+    // 1) hop up and down 3×
+    .to(attackerEl, {
+      y: -30,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 3,
+      ease: "power1.inOut",
+    })
+    // 2) lunge forward
+    .to(attackerEl, {
+      x: dx,
+      y: dy - 30, // you can dial back vertical if you like
+      duration: 0.4,
+      ease: "power2.out",
+    })
+    // 3) return home
+    .to(attackerEl, {
+      x: 0,
+      y: 0,
+      duration: 0.3,
+      ease: "power2.in",
+    })
+    .to(defenderEl, {
+      y: -10,
+    });
+}

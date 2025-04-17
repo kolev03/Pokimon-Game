@@ -8,7 +8,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  position: absolute; /* pin to the viewport */
+  position: fixed;    /* pin to the viewport */
   top: 0;
   left: 0;
 }
