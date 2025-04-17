@@ -20,17 +20,17 @@ const opponentPokemonHpBar = document.getElementById("opponent-pokemon-hp-bar");
 
 const battleLogMessage = document.getElementById("battle-log-message");
 const attackButton = document.getElementById("attack-button");
+const hyperAttackButton = document.getElementById("hyper-attack-button");
+const defenseButton = document.getElementById("defense-button");
 const resetButton = document.getElementById("reset-button");
 
-// Global variables to store selected Pokémon data
-let selectedPokemon; // Your Pokemon (full API data)
+let selectedPokemon; // Mine Pokemon (full API data)
 let selectedOpponentPokemon; // Opponent Pokemon (full API data)
 
 let playerTotalHP, playerCurrentHP;
 let opponentTotalHP, opponentCurrentHP;
 let numbersArray = [];
 
-// Start by fetching Pokemon for the selection screen.
 fetchPokemons();
 
 /**
@@ -38,7 +38,7 @@ fetchPokemons();
  */
 async function fetchPokemons() {
   let randomNumber;
-  for (let index = 1; index < 51; index++) {
+  for (let index = 1; index < 2; index++) {
     // Generate a unique random number between 1 and 500.
     do {
       randomNumber = Math.floor(Math.random() * 500) + 1;
@@ -167,10 +167,10 @@ function battleStart() {
 
   if (mySpeed >= opponentSpeed) {
     battleLogMessage.textContent = "You get to attack first!";
-    attackButton.classList.remove("invisible");
+    displayAttacks(true);
   } else {
     battleLogMessage.textContent = "Your opponent will attack first!";
-    setTimeout(opponentAttack, 1500);
+    setTimeout(opponentRandomAttack, 1500);
   }
 }
 
@@ -191,55 +191,6 @@ function updatePlayerHpBar() {
   myPokemonHpBar.style.width = percentage + "%";
   myPokemonHpBar.textContent = `HP: ${playerCurrentHP}`;
 }
-
-/**
- * Called when the attack button is clicked.
- * Your Pokemon attacks, reducing the opponent's HP, then triggers the opponent's counterattack.
- */
-function playerAttack() {
-  attackButton.classList.add("invisible");
-  let randomNumber = Math.floor(Math.random() * 10) + 1;
-  console.log(randomNumber);
-  if (randomNumber === 1) {
-    battleLogMessage.textContent = "You missed your attack!";
-  } else {
-    opponentCurrentHP -= 15;
-    if (opponentCurrentHP < 0) opponentCurrentHP = 0;
-    updateOpponentHpBar();
-
-    if (opponentCurrentHP === 0) {
-      battleLogMessage.textContent = "You WON!";
-      resetGame();
-      return;
-    }
-    battleLogMessage.textContent = "Your opponent's turn!";
-  }
-  setTimeout(opponentAttack, 1500);
-}
-
-/**
- * Handles the opponent's attack.
- * The opponent's attack reduces your Pokemon's HP.
- */
-function opponentAttack() {
-  let randomNumber = Math.floor(Math.random() * 10) + 1;
-  if (randomNumber === 1) {
-    battleLogMessage.textContent = "Opponent missed their attack!";
-  } else {
-    playerCurrentHP -= 15;
-    if (playerCurrentHP < 0) playerCurrentHP = 0;
-    updatePlayerHpBar();
-
-    if (playerCurrentHP === 0) {
-      battleLogMessage.textContent = "You LOST!";
-      resetGame();
-      return;
-    }
-    battleLogMessage.textContent = "Your turn!";
-  }
-  attackButton.classList.remove("invisible");
-}
-
 /**
  * Renders the given Pokemon's data in the battle UI.
  * - If side is "opp", the opponent's Pokemon data is displayed.
@@ -279,8 +230,106 @@ function resetGame() {
   resetButton.classList.remove("invisible");
 }
 
-// Attach event listener to the attack button.
-attackButton.addEventListener("click", playerAttack);
+/**
+ * Showing or hiding the attacks in the battle log
+ * - If it's true, it will add them
+ * - If it's false, it will hide them
+ */
+function displayAttacks(show) {
+  if (show) {
+    attackButton.classList.remove("invisible");
+    hyperAttackButton.classList.remove("invisible");
+    defenseButton.classList.remove("invisible");
+    battleLogMessage.classList.add("invisible");
+  } else {
+    attackButton.classList.add("invisible");
+    hyperAttackButton.classList.add("invisible");
+    defenseButton.classList.add("invisible");
+    battleLogMessage.classList.remove("invisible");
+  }
+}
+
+const moves = {
+  normal: {
+    name: "Normal Attack",
+    damage: 15,
+    hitChance: 0.9, // 90% chance to hit
+  },
+  hyper: {
+    name: "Hyper Attack",
+    damage: 45,
+    hitChance: 0.33, // 33%  chance to hit
+  }
+};
+
+/**
+ * Performing the battle moves. Here we take two variables, who and moveKey
+ * - who -> choosing who is dealing the damage
+ * - moveKey -> choosing which number of move will be applied
+ */
+function performMove(who, moveKey) {
+
+  console.log(selectedPokemon)
+  const move = moves[moveKey];
+  const isPlayer = who === "mine";
+
+  const attackerName = isPlayer ? "You" : "Opponent";
+
+  if (Math.random() > move.hitChance) {
+    battleLogMessage.textContent = `${attackerName} missed the ${move.name}!`;
+  } else {
+
+    if (isPlayer) {
+      opponentCurrentHP -= move.damage;
+      if (opponentCurrentHP < 0) opponentCurrentHP = 0;
+      updateOpponentHpBar();
+    } else {
+      playerCurrentHP -= move.damage;
+      if (playerCurrentHP < 0) playerCurrentHP = 0;
+      updatePlayerHpBar();
+    }
+
+    if (opponentCurrentHP === 0) {
+      displayAttacks(false)
+      battleLogMessage.textContent = "You WON!";
+      return resetGame();
+    }
+    if (playerCurrentHP === 0) {
+      battleLogMessage.textContent = "You LOST!";
+      return resetGame();
+    }
+
+    // Next turn message
+    battleLogMessage.textContent = isPlayer
+      ? "Your opponent's turn!"
+      : "Your turn!";
+  }
+
+  if (isPlayer) {
+    displayAttacks(false);
+    setTimeout(opponentRandomAttack, 1500);
+  } else {
+    setTimeout(() => displayAttacks(true), 1500);
+  }
+}
+
+function opponentRandomAttack() {
+  const keys = Object.keys(moves);
+  const choiceNum = keys[Math.floor(Math.random() * keys.length)];
+  const choice = moves[choiceNum];
+
+  battleLogMessage.textContent = `Opponent uses ${choice.name}!`;
+
+  displayAttacks(false);
+
+  setTimeout(() => {
+    performMove("opp", choiceNum);
+  }, 1500);
+}
+
+attackButton.addEventListener("click", () => performMove("mine", "normal"));
+hyperAttackButton.addEventListener("click", () => performMove("mine", "hyper"));
+// defenseButton.   addEventListener("click", () => performMove("mine", "defend"));
 
 resetButton.addEventListener("click", function () {
   combatPage.classList.add("invisible");
@@ -292,8 +341,4 @@ resetButton.addEventListener("click", function () {
   fetchPokemons();
   selectPokemonPage.classList.remove("invisible");
   resetButton.classList.add("invisible");
-});
-
-pokemonCardElement.addEventListener("touchstart", function (e) {
-  selectPokemon(this);
 });

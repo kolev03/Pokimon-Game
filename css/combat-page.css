@@ -126,9 +126,11 @@
   font-size: 3rem;
 }
 
-/* Attack Button */
+/* Action buttons */
 #attack-button,
-#reset-button {
+#reset-button,
+#hyper-attack-button,
+#defense-button {
   color: white;
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
