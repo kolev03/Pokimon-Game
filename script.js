@@ -31,14 +31,12 @@ let playerTotalHP, playerCurrentHP;
 let opponentTotalHP, opponentCurrentHP;
 let numbersArray = [];
 
-fetchPokemons();
-
 /**
- * Fetch 10 unique Pokemon from the API into the selection container.
+ * Fetch 151 unique Pokemons from the API into the selection container.
  */
 async function fetchPokemons() {
   let randomNumber;
-  for (let index = 1; index < 2; index++) {
+  for (let index = 1; index < 151; index++) {
     // Generate a unique random number between 1 and 500.
     do {
       randomNumber = Math.floor(Math.random() * 500) + 1;
@@ -62,6 +60,7 @@ async function fetchPokemons() {
         }');
            background-size: cover;
            background-position: center;">
+           
             <div class="pokemon-data">
               <h2>${
                 data.name.charAt(0).toUpperCase() +
@@ -74,6 +73,7 @@ async function fetchPokemons() {
       alert(error);
     }
   }
+
   selectPokemonText.style.visibility = "visible";
   loadingText.classList.add("invisible");
   pokemonSelectionContainer.classList.remove("invisible");
@@ -87,7 +87,6 @@ async function fetchPokemons() {
  */
 function selectPokemon(elem) {
   const id = elem.id;
-  console.log("Selected Pokemon id:", id);
 
   // Play the Pokemon cry.
   const sound = new Audio(
@@ -259,7 +258,7 @@ const moves = {
     name: "Hyper Attack",
     damage: 45,
     hitChance: 0.33, // 33%  chance to hit
-  }
+  },
 };
 
 /**
@@ -268,8 +267,7 @@ const moves = {
  * - moveKey -> choosing which number of move will be applied
  */
 function performMove(who, moveKey) {
-
-  console.log(selectedPokemon)
+  // console.log(selectedPokemon.stats[1].base_stat);
   const move = moves[moveKey];
   const isPlayer = who === "mine";
 
@@ -278,7 +276,6 @@ function performMove(who, moveKey) {
   if (Math.random() > move.hitChance) {
     battleLogMessage.textContent = `${attackerName} missed the ${move.name}!`;
   } else {
-
     if (isPlayer) {
       opponentCurrentHP -= move.damage;
       if (opponentCurrentHP < 0) opponentCurrentHP = 0;
@@ -289,12 +286,14 @@ function performMove(who, moveKey) {
       updatePlayerHpBar();
     }
 
+    // Checking if the game is over
     if (opponentCurrentHP === 0) {
-      displayAttacks(false)
+      displayAttacks(false);
       battleLogMessage.textContent = "You WON!";
       return resetGame();
     }
     if (playerCurrentHP === 0) {
+      displayAttacks(false);
       battleLogMessage.textContent = "You LOST!";
       return resetGame();
     }
@@ -326,6 +325,28 @@ function opponentRandomAttack() {
     performMove("opp", choiceNum);
   }, 1500);
 }
+
+document.getElementById("start-game").addEventListener("click", function () {
+  gsap.set(selectPokemonPage, {
+    display: "block",
+    xPercent: 100,
+  });
+
+  gsap
+    .timeline({
+      defaults: { duration: 0.7, ease: "power3.inOut" },
+      onComplete: () => {
+        gsap.set(startPage, {
+          visibility: "hidden",
+          xPercent: 0,
+        });
+      },
+    })
+    .to(startPage, { xPercent: -100 })
+    .to(selectPokemonPage, { xPercent: 0 }, "<");
+
+  fetchPokemons();
+});
 
 attackButton.addEventListener("click", () => performMove("mine", "normal"));
 hyperAttackButton.addEventListener("click", () => performMove("mine", "hyper"));

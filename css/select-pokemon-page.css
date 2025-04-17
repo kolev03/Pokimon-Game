@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
 
-#select-pokemon-page {
+.select-pokemon-page {
   width: 100%;
   min-height: 100vh;
   height: max-content;
@@ -8,6 +8,9 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  position: absolute; /* pin to the viewport */
+  top: 0;
+  left: 0;
 }
 
 #select-pokemon-page h1 {
