@@ -150,7 +150,7 @@ function loadBattleUI() {
       displayPokemonsData("mine", selectedPokemon);
       displayPokemonsData("opp", selectedOpponentPokemon);
 
-      // After 2 seconds, start the battle by comparing attack speeds.
+      // After 5 seconds, start the battle by comparing attack speeds.
       setTimeout(battleStart, 5000);
       setTimeout(() => {
         backgroundMusic = new Audio("./mp3/battle.mp3");
@@ -179,10 +179,12 @@ function battleStart() {
 
   if (mySpeed >= opponentSpeed) {
     battleLogMessage.textContent = "You get to attack first!";
-    displayAttacks(true);
+    setTimeout(() => {
+      displayAttacks(true);
+    }, 2500);
   } else {
     battleLogMessage.textContent = "Your opponent will attack first!";
-    setTimeout(opponentRandomAttack, 3500);
+    setTimeout(opponentRandomAttack, 2500);
   }
 }
 
@@ -253,12 +255,10 @@ function displayAttacks(show) {
     attackButton.classList.remove("invisible");
     hyperAttackButton.classList.remove("invisible");
     defenseButton.classList.remove("invisible");
-    battleLogMessage.classList.add("invisible");
   } else {
     attackButton.classList.add("invisible");
     hyperAttackButton.classList.add("invisible");
     defenseButton.classList.add("invisible");
-    battleLogMessage.classList.remove("invisible");
   }
 }
 
@@ -288,9 +288,17 @@ function performMove(who, moveKey) {
   // miss check
   if (Math.random() > move.hitChance) {
     battleLogMessage.textContent = `${attackerName} missed the ${move.name}!`;
-    return isPlayer
-      ? setTimeout(opponentRandomAttack, 1500)
-      : setTimeout(() => displayAttacks(true), 1500);
+
+    if (isPlayer) {
+      displayAttacks(false);
+      return setTimeout(opponentRandomAttack, 2500);
+    } else {
+      // after opponent miss, re‑enable your buttons *and* update the log
+      return setTimeout(() => {
+        displayAttacks(true);
+        battleLogMessage.textContent = "Your turn!";
+      }, 2500);
+    }
   }
 
   // start the visual attack
@@ -323,7 +331,7 @@ function performMove(who, moveKey) {
 
     // schedule the opponent or re‑enable buttons
     if (isPlayer) {
-      setTimeout(opponentRandomAttack, 1500);
+      setTimeout(opponentRandomAttack, 2500);
     } else {
       displayAttacks(true);
     }
@@ -361,6 +369,7 @@ hyperAttackButton.addEventListener("click", () => performMove("mine", "hyper"));
 
 resetButton.addEventListener("click", function () {
   combatPage.classList.add("invisible");
+  combatPage.style.display = "none";
   numbersArray = [];
   pokemonSelectionContainer.innerHTML = "";
   selectPokemonText.style.visibility = "hidden";
@@ -368,6 +377,7 @@ resetButton.addEventListener("click", function () {
   pokemonSelectionContainer.classList.add("invisible");
   fetchPokemons();
   selectPokemonPage.classList.remove("invisible");
+  selectPokemonPage.style.display = "block";
   resetButton.classList.add("invisible");
 });
 
@@ -423,17 +433,17 @@ function battleUIAnimation() {
  * If false, opp
  */
 function attackAnimation(who) {
-  const attackerEl = who ? myPokemonImage : opponentPokemonImage;
-  const defenderEl = who ? opponentPokemonImage : myPokemonImage;
+  let attackerEl = who ? myPokemonImage : opponentPokemonImage;
+  let defenderEl = who ? opponentPokemonImage : myPokemonImage;
 
   attackerEl.style.zIndex = 3;
   defenderEl.style.zIndex = 2;
 
-  const a = attackerEl.getBoundingClientRect();
-  const b = defenderEl.getBoundingClientRect();
+  let a = attackerEl.getBoundingClientRect();
+  let b = defenderEl.getBoundingClientRect();
 
-  const dx = b.left + b.width * 0.5 - (a.left + a.width * 0.5);
-  const dy = b.top + b.height * 0.5 - (a.top + a.height * 0.5);
+  let dx = b.left + b.width * 0.5 - (a.left + a.width * 0.5);
+  let dy = b.top + b.height * 0.5 - (a.top + a.height * 0.5);
 
   gsap
     .timeline()
@@ -460,6 +470,10 @@ function attackAnimation(who) {
       ease: "power2.in",
     })
     .to(defenderEl, {
-      y: -10,
+      y: -20,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 2,
+      ease: "power1.inOut",
     });
 }
