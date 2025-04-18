@@ -8,7 +8,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  position: fixed;    /* pin to the viewport */
+  position: fixed; /* pin to the viewport */
   top: 0;
   left: 0;
 }
@@ -101,6 +101,39 @@
 .loading-container h2 .third-dot {
   animation: blinkDot 1.5s infinite;
   animation-delay: 0.33s;
+}
+
+#hoverBarPokemon {
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-size: 1.25rem;
+  position: absoslute;
+  left: 50%;
+  top: 0;
+  color: rgb(0, 0, 0);
+  white-space: nowrap;
+  padding: 10px 15px;
+  border-radius: 7px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#hoverBarPokemon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border: 15px solid;
+  border-color: #000;
+}
+
+.pokemon-card:hover #hoverBarPokemon {
+  top: -130%;
+  display: block;
+  opacity: 1;
 }
 
 @keyframes blinkDot {

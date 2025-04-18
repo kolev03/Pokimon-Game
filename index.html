@@ -14,7 +14,27 @@
     <div id="start-page" class="start-page">
       <h1>P<span>o</span>K<span>e</span>M<span>o</span>N</h1>
       <h2>Battle Game</h2>
-      <button id="start-game">START GAME</button>
+      <div class="logic-of-the-game">
+        <h3>
+          Here is how you play the game: (Sorry for the dry start page, working
+          on it)
+          <ul>
+            <li>
+              First, choose a random pokemon. Each game you have 150 random
+              choices
+            </li>
+            <li>Second, after choosing your pokemon, you enter a battle</li>
+            <li>
+              Third, now you are facing other random pokemon, picked from 500
+              possible choises
+            </li>
+            <li>From here, the battle is in your hands</li>
+            <li>Normal Attack -> 10% Miss Chance, 15DMG</li>
+            <li>Hyper Attack -> 66% Miss Chance, 45DMG</li>
+          </ul>
+        </h3>
+      </div>
+      <button id="start-game">START GAME -></button>
       <div class="intrusctions"></div>
     </div>
     <!-- ------------------------------------------- -->
@@ -33,7 +53,13 @@
       </div>
     </div>
     <!-- ------------------------------------------- -->
-    <div id="blackOverlay" class="screen" style="background:#000; display:none;"></div>
+    <!-- For animation -->
+    <div
+      id="blackOverlay"
+      class="screen"
+      style="background: #000; display: none"
+    ></div>
+    <!-- ------------------------------------------- -->
     <div id="combat-page" class="invisible">
       <div id="battle-field">
         <div id="my-pokemon" class="my-pokemon">
@@ -68,27 +94,18 @@
           <h2 id="battle-log-message" class="battle-log-message">
             You are facing
           </h2>
-          <button id="attack-button" class="invisible">Attack</button>
-          <button id="hyper-attack-button" class="invisible">
-            Hyper Attack
-          </button>
-          <button id="defense-button" class="invisible">Defend</button>
-          <button id="reset-button" class="invisible">Reset Game</button>
+          <div class="buttons-section">
+            <button id="attack-button" class="invisible">Attack</button>
+            <button id="hyper-attack-button" class="invisible">
+              Hyper Attack
+            </button>
+            <button id="defense-button" class="invisible">Defend</button>
+            <button id="reset-button" class="invisible">Reset Game</button>
+          </div>
         </div>
       </div>
     </div>
     <!-- ------------------------------------------- -->
   </body>
-  <script type="module">
-    import { gsap } from "https://unpkg.com/gsap@3.12.7?module";
-
-    // now you can use ES‑style imports
-    gsap.from(".pokemon-card", {
-      duration: 0.5,
-      y: -50,
-      opacity: 0,
-      stagger: 0.1,
-    });
-  </script>
   <script src="script.js"></script>
 </html>

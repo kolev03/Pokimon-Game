@@ -27,6 +27,7 @@ const resetButton = document.getElementById("reset-button");
 let selectedPokemon; // Mine Pokemon (full API data)
 let selectedOpponentPokemon; // Opponent Pokemon (full API data)
 
+// Creating local variables for the current battle
 let playerTotalHP, playerCurrentHP;
 let opponentTotalHP, opponentCurrentHP;
 let numbersArray = [];
@@ -55,15 +56,17 @@ async function fetchPokemons() {
         continue;
       }
       let data = await response.json();
-      // Insert a pokemon card. The onclick calls selectPokemon(this)
+      let hpStat = data.stats.find((statObj) => statObj.stat.name === "hp").base_stat;
+      
       pokemonSelectionContainer.insertAdjacentHTML(
         "beforeend",
-        `<div onclick="selectPokemon(this)" id="${randomNumber}" class="pokemon-card" style="background-image: url('${
+        `
+        <div onclick="selectPokemon(this)" id="${randomNumber}" class="pokemon-card" style="background-image: url('${
           data.sprites.front_default
         }');
            background-size: cover;
            background-position: center;">
-           
+           <span id="hoverBarPokemon">Hp: ${hpStat}</span>
             <div class="pokemon-data">
               <h2>${
                 data.name.charAt(0).toUpperCase() +
@@ -239,16 +242,15 @@ function displayPokemonsData(side, pokemon) {
   }
 }
 
+// Stops the battle music, displays the Reset Button and hides the .
 function resetGame() {
   backgroundMusic.pause();
-  attackButton.classList.add("invisible");
   resetButton.classList.remove("invisible");
 }
 
 /**
- * Showing or hiding the attacks in the battle log
- * - If it's true, it will add them
- * - If it's false, it will hide them
+ * Showing or hiding the attacks in the battle log.
+ * @param {string} show - Either true or false.
  */
 function displayAttacks(show) {
   if (show) {
@@ -273,27 +275,60 @@ const moves = {
     damage: 45,
     hitChance: 0.33, // 33%  chance to hit
   },
+  heal: {
+    name: "Heal",
+    min: 10,
+    max: 25,
+    hitChance: 1.0, // always succeeds
+  },
 };
 
 /**
  * Performing the battle moves. Here we take two variables, who and moveKey
  * - who -> choosing who is dealing the damage
  * - moveKey -> choosing which number of move will be applied
+ * @param {string} who - Either "mine" or anything else.
+ * @param {object} moveKey - Move key from the moves array
  */
 function performMove(who, moveKey) {
   const move = moves[moveKey];
   const isPlayer = who === "mine";
   const attackerName = isPlayer ? "You" : "Opponent";
 
-  // miss check
-  if (Math.random() > move.hitChance) {
-    battleLogMessage.textContent = `${attackerName} missed the ${move.name}!`;
+  if (moveKey === "heal") {
+    // pick a random heal amount
+    const amount =
+      Math.floor(Math.random() * (move.max - move.min + 1)) + move.min;
+    if (isPlayer) {
+      playerCurrentHP = Math.min(playerTotalHP, playerCurrentHP + amount);
+      updatePlayerHpBar();
+    } else {
+      opponentCurrentHP = Math.min(opponentTotalHP, opponentCurrentHP + amount);
+      updateOpponentHpBar();
+    }
+    battleLogMessage.textContent = `${attackerName} healed for ${amount} HP!`;
+    displayAttacks(false);
 
+    // update the message after the move
     if (isPlayer) {
       displayAttacks(false);
       return setTimeout(opponentRandomAttack, 2500);
     } else {
-      // after opponent miss, re‑enable your buttons *and* update the log
+      return setTimeout(() => {
+        displayAttacks(true);
+        battleLogMessage.textContent = "Your turn!";
+      }, 2500);
+    }
+  }
+
+  // Displaying message if the move missed
+  if (Math.random() > move.hitChance) {
+    battleLogMessage.textContent = `${attackerName} missed the ${move.name}!`;
+    if (isPlayer) {
+      displayAttacks(false);
+      return setTimeout(opponentRandomAttack, 2500);
+    } else {
+      // after opponent miss, re‑enable buttons and update the log
       return setTimeout(() => {
         displayAttacks(true);
         battleLogMessage.textContent = "Your turn!";
@@ -317,10 +352,12 @@ function performMove(who, moveKey) {
 
     // check for ko
     if (opponentCurrentHP === 0) {
+      pokemonSlayed(false);
       battleLogMessage.textContent = "You WON!";
       return resetGame();
     }
     if (playerCurrentHP === 0) {
+      pokemonSlayed(true);
       battleLogMessage.textContent = "You LOST!";
       return resetGame();
     }
@@ -363,10 +400,12 @@ document.getElementById("start-game").addEventListener("click", function () {
   fetchPokemons();
 });
 
+// Event listeners for the move buttons
 attackButton.addEventListener("click", () => performMove("mine", "normal"));
 hyperAttackButton.addEventListener("click", () => performMove("mine", "hyper"));
-// defenseButton.   addEventListener("click", () => performMove("mine", "defend"));
+defenseButton.addEventListener("click", () => performMove("mine", "heal"));
 
+// Reseting the game
 resetButton.addEventListener("click", function () {
   combatPage.classList.add("invisible");
   combatPage.style.display = "none";
@@ -407,10 +446,6 @@ function battleUIAnimation() {
   gsap.set(blackOv, { display: "block", xPercent: 100 });
   gsap.set(combatPage, { display: "block", xPercent: 100 });
 
-  // 2) timeline:
-  //    a) black slides in (0.5s)
-  //    b) panels slide (0.7s)
-  //    c) black slides out (0.5s)
   gsap
     .timeline({
       defaults: { duration: 1.75, ease: "expo.out" },
@@ -418,7 +453,7 @@ function battleUIAnimation() {
         gsap.set(selectPokemonPage, { display: "none", xPercent: 0 });
       },
     })
-    .to(blackOv, { xPercent: 100 }) // flash black
+    .to(blackOv, { xPercent: 100 })
     .to(
       selectPokemonPage,
       { xPercent: -100, duration: 1.7, ease: "expo.out" },
@@ -429,8 +464,8 @@ function battleUIAnimation() {
 }
 
 /**
- * If true, my pokemon
- * If false, opp
+ * Making the animation, depending who is attacking. True is for our pokimon, false for the other.
+ * @param {string} who - Either true or false.
  */
 function attackAnimation(who) {
   let attackerEl = who ? myPokemonImage : opponentPokemonImage;
@@ -447,7 +482,6 @@ function attackAnimation(who) {
 
   gsap
     .timeline()
-    // 1) hop up and down 3×
     .to(attackerEl, {
       y: -30,
       duration: 0.1,
@@ -455,25 +489,64 @@ function attackAnimation(who) {
       repeat: 3,
       ease: "power1.inOut",
     })
-    // 2) lunge forward
+
     .to(attackerEl, {
       x: dx,
-      y: dy - 30, // you can dial back vertical if you like
+      y: dy - 30,
       duration: 0.4,
       ease: "power2.out",
     })
-    // 3) return home
     .to(attackerEl, {
       x: 0,
       y: 0,
       duration: 0.3,
       ease: "power2.in",
     })
-    .to(defenderEl, {
-      y: -20,
-      duration: 0.1,
-      yoyo: true,
-      repeat: 2,
-      ease: "power1.inOut",
-    });
+    .to(
+      defenderEl,
+      {
+        x: "-=10",
+        duration: 0.1,
+        yoyo: true,
+        repeat: 5,
+        ease: "power1.inOut",
+      },
+      "<"
+    )
+    .to(
+      defenderEl,
+      {
+        y: "-=10",
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+        ease: "power1.inOut",
+      },
+      "<"
+    )
+
+    .to(
+      defenderEl,
+      {
+        filter: "brightness(2)",
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+      },
+      "<"
+    );
+}
+
+function pokemonSlayed(who) {
+  let defenderEl = who ? myPokemonImage : opponentPokemonImage;
+  gsap.to(defenderEl, {
+    y: 40,
+    duration: 0.6,
+    opacity: 0,
+    ease: "expo.out",
+    onComplete: () => {
+      defenderEl.style.display = "none";
+      gsap.set(defenderEl, { clearProps: "y,opacity" });
+    },
+  });
 }
