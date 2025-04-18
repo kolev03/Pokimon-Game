@@ -40,7 +40,7 @@ let backgroundMusic;
 async function fetchPokemons() {
   let randomNumber;
 
-  for (let index = 1; index < 151; index++) {
+  for (let index = 1; index < 101; index++) {
     // Generate a unique random number between 1 and 500.
     do {
       randomNumber = Math.floor(Math.random() * 500) + 1;

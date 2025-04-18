@@ -87,3 +87,48 @@ body {
     0 5px 0 0 black;
 }
 
+@media only screen and (max-width: 1050px) {
+  .logic-of-the-game {
+    width: 80%;
+    font-size: 1rem;
+    margin: 120px auto 0;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  #start-page h1 {
+    font-size: 6rem;
+  }
+
+  #start-page h2 {
+    font-size: 3rem;
+    
+  margin: -50px auto;
+  }
+  .logic-of-the-game {
+    font-size: 0.75rem;
+  }
+
+  #start-page button {
+    font-family: "Pixelify Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    color: rgb(0, 0, 0);
+    background-color: rgb(120, 244, 244);
+    padding: 30px;
+    font-size: 1.5rem;
+    margin: auto;
+    box-shadow: -10px 0 0 0 black, 10px 0 0 0 black, 0 -10px 0 0 black,
+      0 10px 0 0 black;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  #start-page h1 {
+    font-size: 5rem;
+  }
+  .logic-of-the-game {
+    margin: 160px auto 0;
+  }
+}
