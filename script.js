@@ -56,8 +56,10 @@ async function fetchPokemons() {
         continue;
       }
       let data = await response.json();
-      let hpStat = data.stats.find((statObj) => statObj.stat.name === "hp").base_stat;
-      
+      let hpStat = data.stats.find(
+        (statObj) => statObj.stat.name === "hp"
+      ).base_stat;
+
       pokemonSelectionContainer.insertAdjacentHTML(
         "beforeend",
         `
@@ -267,12 +269,12 @@ function displayAttacks(show) {
 const moves = {
   normal: {
     name: "Normal Attack",
-    damage: 15,
+    damage: 25,
     hitChance: 0.9, // 90% chance to hit
   },
   hyper: {
     name: "Hyper Attack",
-    damage: 45,
+    damage: 55,
     hitChance: 0.33, // 33%  chance to hit
   },
   heal: {
@@ -415,6 +417,8 @@ resetButton.addEventListener("click", function () {
   loadingText.classList.remove("invisible");
   pokemonSelectionContainer.classList.add("invisible");
   fetchPokemons();
+  myPokemonImage.style.visibility = "visible";
+  opponentPokemonImage.style.visibility = "visible";
   selectPokemonPage.classList.remove("invisible");
   selectPokemonPage.style.display = "block";
   resetButton.classList.add("invisible");
@@ -545,7 +549,7 @@ function pokemonSlayed(who) {
     opacity: 0,
     ease: "expo.out",
     onComplete: () => {
-      defenderEl.style.display = "none";
+      defenderEl.style.visibility = "hidden";
       gsap.set(defenderEl, { clearProps: "y,opacity" });
     },
   });
