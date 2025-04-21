@@ -259,10 +259,14 @@ function displayAttacks(show) {
     attackButton.classList.remove("invisible");
     hyperAttackButton.classList.remove("invisible");
     defenseButton.classList.remove("invisible");
+    document.querySelector(".battle-log-section").style.justifyContent =
+      "space-evenly";
   } else {
     attackButton.classList.add("invisible");
     hyperAttackButton.classList.add("invisible");
     defenseButton.classList.add("invisible");
+    document.querySelector(".battle-log-section").style.justifyContent =
+      "center";
   }
 }
 

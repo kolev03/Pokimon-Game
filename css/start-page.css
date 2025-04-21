@@ -21,114 +21,139 @@ body {
 }
 
 .start-page {
-  width: 100%;
-  min-height: 100vh;
-  max-height: 100%;
-  background-image: url("../resources/login-page-background.png");
-  background-repeat: no-repeat;
-  background-position: center; /* center the image */
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  position: fixed; /* pin to the viewport */
+  position: fixed;
   top: 0;
   left: 0;
-}
-
-#start-page h1 {
-  font-family: "Pokemon Solid", sans-serif;
-  font-size: 8rem;
-  -webkit-text-stroke: 3px rgb(25, 84, 213);
-  color: rgb(217, 217, 38);
-  margin: 0 auto;
-  padding-top: -120px;
-  text-shadow: -5px 5px 2px rgba(0, 0, 0, 0.5);
-  text-align: center;
-}
-
-#start-page h2 {
+  height: 100vh;
+  width: 100%;
+  background-image: url("../resources/start-page-background.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 300;
-  font-style: normal;
-  color: red;
+  color: white;
+  padding: 100px;
+}
+
+.start-page h1 {
+  font-size: 18rem;
+  backdrop-filter: blur(4px);
+  z-index: 0;
+}
+
+.start-page h2 {
+  font-size: 7rem;
+  color: rgb(240, 87, 87);
+  margin: -30px 10px 0 0;
+  z-index: 1;
+  text-decoration: underline;
+  backdrop-filter: blur(4px);
+}
+
+.start-page h3 {
   font-size: 4rem;
-  margin: -80px auto;
-  padding-left: 30px;
-  text-align: center;
+  margin: 40px 0;
 }
 
-#start-page button {
+#start-game {
+  font-size: 5rem;
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-  color: rgb(0, 0, 0);
-  background-color: rgb(120, 244, 244);
-  padding: 30px;
-  font-size: 3rem;
-  margin: auto;
-  box-shadow: -10px 0 0 0 black, 10px 0 0 0 black, 0 -10px 0 0 black,
-    0 10px 0 0 black;
+  font-weight: 500;
+  color: white;
+  border: none;
+  background-color: transparent;
+  transition: 1s ease;
 }
 
-.logic-of-the-game {
-  background-color: rgb(75, 201, 247);
-  padding: 30px;
-  font-size: 1.25rem;
-  font-family: "Figtree", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-  margin: 140px auto 0;
-  box-shadow: -5px 0 0 0 black, 5px 0 0 0 black, 0 -5px 0 0 black,
-    0 5px 0 0 black;
+#start-game:hover {
+  cursor: pointer;
+  transition: 1s ease;
 }
 
-@media only screen and (max-width: 1050px) {
-  .logic-of-the-game {
-    width: 80%;
-    font-size: 1rem;
-    margin: 120px auto 0;
+@media only screen and (max-width: 1425px) {
+  .start-page h1 {
+    font-size: 12rem;
   }
 }
 
-@media only screen and (max-width: 650px) {
-  #start-page h1 {
-    font-size: 6rem;
+@media only screen and (max-width: 1000px) {
+  .start-page h1 {
+    font-size: 9rem;
   }
 
-  #start-page h2 {
-    font-size: 3rem;
-    
-  margin: -50px auto;
-  }
-  .logic-of-the-game {
-    font-size: 0.75rem;
-  }
-
-  #start-page button {
-    font-family: "Pixelify Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    color: rgb(0, 0, 0);
-    background-color: rgb(120, 244, 244);
-    padding: 30px;
-    font-size: 1.5rem;
-    margin: auto;
-    box-shadow: -10px 0 0 0 black, 10px 0 0 0 black, 0 -10px 0 0 black,
-      0 10px 0 0 black;
+  .start-page h2 {
+    font-size: 4rem;
+    margin-top: -10px;
   }
 }
 
-@media only screen and (max-width: 425px) {
-  #start-page h1 {
+@media only screen and (max-width: 800px) {
+  .start-page h1 {
     font-size: 5rem;
   }
-  .logic-of-the-game {
-    margin: 160px auto 0;
+
+  .start-page h2 {
+    font-size: 2rem;
+  }
+
+  .start-page h3 {
+    font-size: 3rem;
+    margin: 160px 0;
+  }
+
+  #start-game {
+    font-size: 3rem;
+    backdrop-filter: blur(7px);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+
+  .start-page{
+    padding: 50px;
+  }
+  .start-page h1 {
+    font-size: 4rem;
+  }
+
+  .start-page h2 {
+    font-size: 2.5rem;
+  }
+
+  .start-page h3 {
+    font-size: 3.75rem;
+    margin: 160px 0;
+  }
+
+  #start-game {
+    font-size: 3.75rem;
+    backdrop-filter: blur(7px);
+  }
+}
+
+@media only screen and (max-width: 480px) {
+
+  .start-page{
+    padding: 50px;
+  }
+  .start-page h1 {
+    font-size: 4rem;
+  }
+
+  .start-page h2 {
+    font-size: 1.5rem;
+  }
+
+  .start-page h3 {
+    font-size: 2.25rem;
+    margin: 160px 0;
+  }
+
+  #start-game {
+    font-size: 2.25rem;
+    backdrop-filter: blur(7px);
   }
 }
