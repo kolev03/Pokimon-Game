@@ -395,6 +395,16 @@ function opponentRandomAttack() {
   }, 1500);
 }
 
+// Instructions button
+document
+  .querySelector("#instructions-text")
+  .addEventListener("click", function () {
+    document
+      .querySelector(".start-page-instructions")
+      .classList.toggle("invisible");
+      console.log("clicked")
+  });
+
 // Starting the game button
 document.getElementById("start-game").addEventListener("click", function () {
   startPageToSelectPageAnimation();

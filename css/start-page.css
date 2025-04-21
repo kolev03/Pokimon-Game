@@ -53,8 +53,13 @@ body {
 }
 
 .start-page h3 {
+  width: min-content;
   font-size: 4rem;
-  margin: 40px 0;
+  margin: 70px 0 20px;
+}
+
+.start-page h3:hover {
+  cursor: pointer;
 }
 
 #start-game {
@@ -71,6 +76,17 @@ body {
 #start-game:hover {
   cursor: pointer;
   transition: 1s ease;
+}
+
+.start-page-instructions {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 80%;
+  height: 90vh;
+  transition: 0.3s;
+  z-index: 5;
+  background-color: white;
 }
 
 @media only screen and (max-width: 1425px) {
@@ -111,8 +127,7 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-
-  .start-page{
+  .start-page {
     padding: 50px;
   }
   .start-page h1 {
@@ -135,8 +150,7 @@ body {
 }
 
 @media only screen and (max-width: 480px) {
-
-  .start-page{
+  .start-page {
     padding: 50px;
   }
   .start-page h1 {
