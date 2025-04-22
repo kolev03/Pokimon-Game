@@ -395,18 +395,42 @@ function opponentRandomAttack() {
   }, 1500);
 }
 
+/**
+ * Toggling the class invisible from the instuctions divs
+ */
+function toggleInstructions() {
+  document.querySelector(".instructions").classList.toggle("invisible");
+  document.querySelector(".instructions-overlay").classList.toggle("invisible");
+}
+
 // Instructions button
 document
   .querySelector("#instructions-text")
   .addEventListener("click", function () {
-    document
-      .querySelector(".start-page-instructions")
-      .classList.toggle("invisible");
-      console.log("clicked")
+    toggleInstructions();
+  });
+
+// Closing the instructions panel
+document
+  .querySelector(".instructions-overlay")
+  .addEventListener("click", function () {
+    toggleInstructions();
+  });
+
+document
+  .querySelector("#close-instructions")
+  .addEventListener("click", function () {
+    toggleInstructions();
   });
 
 // Starting the game button
 document.getElementById("start-game").addEventListener("click", function () {
+  gsap.to(document.getElementById("start-game"), {
+    x: 1000,
+    opacity: 0,
+    duration: 0.1,
+    ease: "power1.inOut",
+  });
   startPageToSelectPageAnimation();
   backgroundMusic = new Audio("./mp3/selectPage.mp3");
   backgroundMusic.loop = true;

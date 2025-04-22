@@ -1,5 +1,3 @@
-@import url("https://fonts.cdnfonts.com/css/pokemon-solid");
-@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 
 * {
@@ -40,7 +38,6 @@ body {
 .start-page h1 {
   font-size: 18rem;
   backdrop-filter: blur(4px);
-  z-index: 0;
 }
 
 .start-page h2 {
@@ -70,28 +67,95 @@ body {
   color: white;
   border: none;
   background-color: transparent;
-  transition: 1s ease;
+  transition: 1.3s ease;
 }
 
 #start-game:hover {
   cursor: pointer;
   transition: 1s ease;
+  font-size: 6rem;
+  transition: 0.3s ease;
+  margin-left: -15px;
 }
 
-.start-page-instructions {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 80%;
-  height: 90vh;
-  transition: 0.3s;
-  z-index: 5;
-  background-color: white;
+.instructions {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50vw;
+  max-width: 600px;
+  background: white;
+  padding: 30px;
+  z-index: 10;
+  overflow-y: auto;
+  max-height: 80vh; 
+  align-items: center;
+}
+
+.instructions-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  z-index: 9; 
+}
+
+#close-instructions{
+  margin: auto;
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  color: red;
+  text-align: center;
+  border: 2px solid red;
+  padding: 5px
+}
+
+.instructions hr {
+  margin: 15px 0;
+}
+
+.instructions h1 {
+  font-size: 4rem;
+}
+
+.instructions ul {
+  list-style: number;
+}
+
+.instructions li {
+  margin-left: 20px;
+  font-size: 1.75rem;
+}
+
+.important-stuff {
+  font-size: 1.25rem;
 }
 
 @media only screen and (max-width: 1425px) {
   .start-page h1 {
     font-size: 12rem;
+  }
+
+  .instructions h1 {
+    font-size: 3rem;
+  }
+
+  .instructions li {
+    margin-left: 20px;
+    font-size: 1.55rem;
+  }
+
+  .important-stuff {
+    font-size: 1.15rem;
   }
 }
 
@@ -123,6 +187,23 @@ body {
   #start-game {
     font-size: 3rem;
     backdrop-filter: blur(7px);
+  }
+
+  .instructions h1 {
+    font-size: 2.25rem;
+  }
+
+  .instructions li {
+    margin-left: 20px;
+    font-size: 1.35rem;
+  }
+
+  .important-stuff {
+    font-size: 1rem;
+  }
+
+  .instructions-overlay {
+    display: hidden;
   }
 }
 
@@ -169,5 +250,30 @@ body {
   #start-game {
     font-size: 2.25rem;
     backdrop-filter: blur(7px);
+  }
+
+  .instructions {
+    width: 95vw;
+    height: 95vh;
+    top: 2.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: none;
+    max-height: none;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .instructions h1 {
+    font-size: 3rem;
+  }
+
+  .instructions li {
+    margin-left: 20px;
+    font-size: 1.55rem;
+  }
+
+  .important-stuff {
+    font-size: 1.15rem;
   }
 }

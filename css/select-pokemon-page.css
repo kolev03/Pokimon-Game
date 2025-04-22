@@ -21,7 +21,7 @@
   padding-top: 20px;
   text-align: center;
   color: white;
-  backdrop-filter: blur(4px)
+  backdrop-filter: blur(4px);
 }
 
 .pokemons-to-select {
@@ -81,6 +81,10 @@
   display: none;
 }
 
+.loading-text {
+  color: white;
+}
+
 .loading-container {
   font-size: 3rem;
   font-family: "Pixelify Sans", sans-serif;
@@ -138,5 +142,20 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .loading-text {
+    margin-top: -40px;
+  }
+
+  .pokemon-card {
+    width: 100px;
+    height: 100px;
+  }
+
+  #select-pokemon-text {
+    font-size: 2rem;
   }
 }
