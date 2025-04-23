@@ -147,7 +147,7 @@
 
 @media screen and (max-width: 400px) {
   .loading-text {
-    margin-top: -40px;
+    margin-top: -30px;
   }
 
   .pokemon-card {
@@ -155,7 +155,7 @@
     height: 100px;
   }
 
-  #select-pokemon-text {
-    font-size: 2rem;
+  #select-pokemon-page h1 {
+    font-size: 3rem;
   }
 }

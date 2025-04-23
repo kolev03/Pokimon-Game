@@ -266,7 +266,7 @@
     gap: 10px;
   }
 
-  .buttons-sectio button {
+  .buttons-section button {
     flex: 1 1 auto;
     min-width: min-content;
   }
@@ -277,6 +277,22 @@
   #opponent-pokemon-stats {
     width: 200px;
   }
+
+  #battle-log-message {
+    font-size: 1.5rem;
+  }
+  #attack-button,
+#reset-button,
+#hyper-attack-button,
+#defense-button {
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  background-color: transparent;
+  font-size: 1.25rem;
+  padding: 10px;
+  margin-left: 15px;
+}
 }
 
 @media only screen and (max-width: 400px) {

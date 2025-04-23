@@ -73,7 +73,6 @@ body {
 #start-game:hover {
   cursor: pointer;
   transition: 1s ease;
-  font-size: 6rem;
   transition: 0.3s ease;
   margin-left: -15px;
 }
