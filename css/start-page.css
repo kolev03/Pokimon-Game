@@ -36,12 +36,12 @@ body {
 }
 
 .start-page h1 {
-  font-size: 18rem;
-  backdrop-filter: blur(4px);
+  font-size: 15rem;
+  backdrop-filter: blur(4pxS);
 }
 
 .start-page h2 {
-  font-size: 7rem;
+  font-size: 6rem;
   color: rgb(240, 87, 87);
   margin: -30px 10px 0 0;
   z-index: 1;
@@ -142,7 +142,7 @@ body {
 
 @media only screen and (max-width: 1425px) {
   .start-page h1 {
-    font-size: 12rem;
+    font-size: 10rem;
   }
 
   .instructions h1 {
