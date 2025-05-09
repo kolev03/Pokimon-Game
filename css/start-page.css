@@ -38,6 +38,7 @@ body {
 .start-page h1 {
   font-size: 15rem;
   backdrop-filter: blur(4pxS);
+  margin-top: -100px;
 }
 
 .start-page h2 {
