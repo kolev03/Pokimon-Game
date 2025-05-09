@@ -127,7 +127,6 @@
 }
 
 .pokemon-card:hover #hoverBarPokemon {
-  top: -130%;
   display: block;
   opacity: 1;
 }
