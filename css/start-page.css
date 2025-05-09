@@ -141,24 +141,6 @@ body {
   font-size: 1.25rem;
 }
 
-@media only screen and (max-width: 1425px) {
-  .start-page h1 {
-    font-size: 10rem;
-  }
-
-  .instructions h1 {
-    font-size: 3rem;
-  }
-
-  .instructions li {
-    margin-left: 20px;
-    font-size: 1.55rem;
-  }
-
-  .important-stuff {
-    font-size: 1.15rem;
-  }
-}
 
 @media only screen and (max-width: 1000px) {
   .start-page h1 {
